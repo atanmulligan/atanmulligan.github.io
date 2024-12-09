@@ -1,137 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>창과 방패</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-
-    header {
-      background-color: #0078D7;
-      color: white;
-      padding: 1rem 0;
-      text-align: center;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1rem;
-      background-color: white;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .record {
-      margin-bottom: 1rem;
-      padding: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-
-    .record h3 {
-      margin: 0 0 0.5rem;
-    }
-
-    .record p {
-      margin: 0;
-    }
-
-    .record .date {
-      font-size: 0.9rem;
-      color: gray;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-
-    textarea {
-      width: 100%;
-      height: 100px;
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      resize: none;
-    }
-
-    button {
-      padding: 0.5rem;
-      background-color: #0078D7;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #005BB5;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창과 방패</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #0078D7;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .record {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            position: relative;
+        }
+        .record h3 {
+            margin: 0 0 0.5rem;
+        }
+        .record p {
+            margin: 0;
+        }
+        .record .date {
+            font-size: 0.9rem;
+            color: gray;
+        }
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.3rem 0.5rem;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #cc0000;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
+        button {
+            padding: 0.5rem;
+            background-color: #0078D7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005BB5;
+        }
+    </style>
 </head>
-
 <body>
-  <header>
-    <h1>창과 방패</h1>
-  </header>
-  <div class="container">
-    <h2>새로운 논쟁 추가하기</h2>
-    <form id="debateForm">
-      <textarea id="debateContent" placeholder="오늘의 논쟁 내용을 입력하세요..."></textarea>
-      <button type="submit">기록하기</button>
-    </form>
-    <h2>기록된 논쟁</h2>
-    <div id="debateList"></div>
-  </div>
-  <script>
-    const debateForm = document.getElementById('debateForm');
-    const debateContent = document.getElementById('debateContent');
-    const debateList = document.getElementById('debateList');
+    <header>
+        <h1>창과 방패 - 우리의 논쟁 기록</h1>
+    </header>
+    <div class="container">
+        <h2>새로운 논쟁 추가하기</h2>
+        <form id="debateForm">
+            <textarea id="debateContent" placeholder="오늘의 논쟁 내용을 입력하세요..."></textarea>
+            <button type="submit">기록하기</button>
+        </form>
+        <h2>기록된 논쟁</h2>
+        <div id="debateList"></div>
+    </div>
+    <script>
+        const debateForm = document.getElementById('debateForm');
+        const debateContent = document.getElementById('debateContent');
+        const debateList = document.getElementById('debateList');
 
-    // Load debates from localStorage
-    const savedDebates = JSON.parse(localStorage.getItem('debates')) || [];
+        const savedDebates = JSON.parse(localStorage.getItem('debates')) || [];
 
-    function renderDebates() {
-      debateList.innerHTML = '';
-      savedDebates.forEach((debate, index) => {
-        const debateElement = document.createElement('div');
-        debateElement.className = 'record';
-        debateElement.innerHTML = `
+        function renderDebates() {
+            debateList.innerHTML = '';
+            savedDebates.forEach((debate, index) => {
+                const debateElement = document.createElement('div');
+                debateElement.className = 'record';
+                debateElement.innerHTML = `
                     <h3>논쟁 #${index + 1}</h3>
                     <p>${debate.content}</p>
                     <p class="date">${debate.date}</p>
+                    <button class="delete-button" onclick="deleteDebate(${index})">삭제</button>
                 `;
-        debateList.appendChild(debateElement);
-      });
-    }
+                debateList.appendChild(debateElement);
+            });
+        }
 
-    debateForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const content = debateContent.value.trim();
-      if (!content) return;
+        debateForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const content = debateContent.value.trim();
+            if (!content) return;
 
-      const newDebate = {
-        content,
-        date: new Date().toLocaleString()
-      };
-      savedDebates.push(newDebate);
-      localStorage.setItem('debates', JSON.stringify(savedDebates));
+            const newDebate = {
+                content,
+                date: new Date().toLocaleString()
+            };
+            savedDebates.push(newDebate);
+            localStorage.setItem('debates', JSON.stringify(savedDebates));
 
-      debateContent.value = '';
-      renderDebates();
-    });
+            debateContent.value = '';
+            renderDebates();
+        });
 
-    renderDebates();
-  </script>
+        function deleteDebate(index) {
+            const password = prompt("비밀번호를 입력하세요: (힌트: snow crash 저항 인물)");
+            if (password !== 'enki') {
+                alert("비밀번호가 틀렸습니다.");
+                return;
+            }
+
+            savedDebates.splice(index, 1);
+            localStorage.setItem('debates', JSON.stringify(savedDebates));
+            renderDebates();
+        }
+
+        renderDebates();
+    </script>
 </body>
-
 </html>
